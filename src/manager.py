@@ -112,3 +112,8 @@ class Manager:
         if apartment_key not in self.apartments:
             raise ValueError("Apartment key does not exist")
         return any([bill for bill in self.bills if bill.apartment == apartment_key and bill.settlement_year == year and bill.settlement_month == month])
+    
+    def validate_transfer_values(self, transfer: Transfer) -> str | None:
+        if transfer.amount_pln < 0 or transfer.amount_pln > self.parameters.max_transfer_amount_pln:
+            return "Error! Value amount not validated."
+        return None
