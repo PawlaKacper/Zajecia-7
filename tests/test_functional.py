@@ -85,3 +85,36 @@ def test_apartment_has_any_bills():
 
     has_bills = manager.has_any_bills('apart-polanka', 2025, 3)
     assert has_bills == False
+
+def test_validate_transfers_values():
+    manager = Manager(Parameters())
+    manager.transferMinValue = 1.0
+    manager.transferMaxValue = 6000.0
+
+    transferMin = Transfer(
+        tenant='tenant-1',
+        date='2025-01-01',
+        settlement_year=2025,
+        settlement_month=1,
+        amount_pln=1.0,
+    )
+
+    transferMax = Transfer(
+        tenant='tenant-2',
+        date='2017-01-01',
+        settlement_year=2017,
+        settlement_month=1,
+        amount_pln=6000.0,
+    )
+
+    transferOutofMax = Transfer(
+        tenant='tenant-1',
+        date='2025-01-01',
+        settlement_year=2025,
+        settlement_month=1,
+        amount_pln=1.0,
+    )
+
+    assert manager.validate_transfer_values(transferMin) == None
+    assert manager.validate_transfer_values(tranferMax) == None
+    assert manager.validate_transfer_values(tranferOutofMax) == "Error! Value amount not validated."
